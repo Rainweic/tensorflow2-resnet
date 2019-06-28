@@ -21,7 +21,7 @@ class PreActBlock(keras.Model):
     def call(self, x):
         out = keras.activations.relu(self.bn1(x))
         out = self.conv1(out)
-        out = keras.activations.relu(self.bn2(x))
+        out = keras.activations.relu(self.bn2(out))
         out = self.conv2(out)
 
         out = out + x
