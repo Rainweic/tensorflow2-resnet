@@ -9,7 +9,7 @@ class PreActBlock(keras.Model):
 
     expansion = 1
 
-    def __init__(self, planes, stride=(1, 1)):
+    def __init__(self, in_planes, planes, stride=1):
         super(PreActBlock, self).__init__()
 
         self.bn1 = layers.BatchNormalization()
@@ -17,6 +17,14 @@ class PreActBlock(keras.Model):
 
         self.bn2 = layers.BatchNormalization()
         self.conv2 = layers.Conv2D(planes, (3,3), strides=stride, padding='same', use_bias=False)
+
+        if stride != 1 or in_planes != self.expansion*planes:
+            self.shortcut = layers.Conv2D(
+                self.expansion * planes,
+                (1, 1),
+                strides=stride,
+                use_bias = False
+            )
 
     def call(self, x):
         out = keras.activations.relu(self.bn1(x))
@@ -28,7 +36,6 @@ class PreActBlock(keras.Model):
 
         return out
 
-model = PreActBlock(64)
-keras.utils.plot_model(model, "test.png")
+
     
 
